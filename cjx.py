@@ -1,13 +1,12 @@
 import argparse
 import json
 import os
-import platform
 import re
-from app.env import Env
 from app.simple import Simple
 from app.jfxml import JFXML
 from app.doctor import Doctor
 from app.clone import Clone
+from helpers import os_identifier
 
 
 class CJX:
@@ -50,6 +49,7 @@ class CJX:
         self.jfxml_parser.add_argument(
             "project_name", help="Name of the JavaFX project"
         )
+        self.os_handler = os_identifier.get_os_handler()
         self.args = None
         self.project_name = None
         self.cjx_path = None
@@ -67,29 +67,43 @@ class CJX:
         self.args = self.parser.parse_args()
 
     def init(self):
+        # try:
+        #     if not os.path.exists("c:/.cjx"):
+        #         current_path = os.getcwd()
+        #         os.chdir("c:/")
+        #         os.mkdir(".cjx")
+        #         os.chdir(".cjx")
+        #         with open("utils_cjx.json", "w") as f:
+        #             json.dump({}, f, indent=4)
+
+        #         with open("utils_cjx.json", "r") as f:
+        #             utils_cjx = json.load(f)
+
+        #         utils_cjx["cjxPath"] = ""
+
+        #         with open("utils_cjx.json", "w") as f:
+        #             json.dump(utils_cjx, f, indent=4)
+        #         print(self.cjx_logo("welcome"))
+        #         print("\t\033[ J CJX CLI initialized successfully 🎉\033[0m")
+        #         os.chdir(current_path)
+        #         print("\t\033[ J Setting the path of CJX CLI . . .\033[0m")
+        #         self.set_cjx_path()
+        #         print("\tAdding CJX CLI path to the environment variable . . .")
+        #         Env.setEnvVariable()
+        #     else:
+        #         print("Error: CJX CLI already initialized")
+        # except Exception as e:
+        #     print(f"Error: {e}")
         try:
-            if not os.path.exists("c:/.cjx"):
+            cjx_dir = self.os_handler.get_cjx_dir()
+            if not os.path.exists(cjx_dir):
                 current_path = os.getcwd()
-                os.chdir("c:/")
-                os.mkdir(".cjx")
-                os.chdir(".cjx")
-                with open("utils_cjx.json", "w") as f:
-                    json.dump({}, f, indent=4)
-
-                with open("utils_cjx.json", "r") as f:
-                    utils_cjx = json.load(f)
-
-                utils_cjx["cjxPath"] = ""
-
-                with open("utils_cjx.json", "w") as f:
-                    json.dump(utils_cjx, f, indent=4)
+                self.os_handler.create_cjx_dir()
                 print(self.cjx_logo("welcome"))
                 print("\t\033[ J CJX CLI initialized successfully 🎉\033[0m")
                 os.chdir(current_path)
                 print("\t\033[ J Setting the path of CJX CLI . . .\033[0m")
                 self.set_cjx_path()
-                print("\tAdding CJX CLI path to the environment variable . . .")
-                Env.setEnvVariable()
             else:
                 print("Error: CJX CLI already initialized")
         except Exception as e:
@@ -133,8 +147,9 @@ class CJX:
         if command == "init":
             self.init()
         elif command in ["create", "setup", "doctor", "clone"]:
-            if os.path.exists("c:/.cjx"):
-                self.cjx_path = "c:/.cjx/utils_cjx.json"
+            cjx_dir = self.os_handler.get_cjx_dir()
+            if os.path.exists(cjx_dir):
+                self.cjx_path = os.path.join(cjx_dir, "utils_cjx.json")
                 if command == "create":
                     if False in Doctor.handle_doctor_command(self):
                         print(
@@ -290,16 +305,17 @@ class CJX:
         return path["cjxPath"]
 
     def set_cjx_path(self):
-        if os.path.exists("cjx.exe") or os.path.exists("cjx.py"):
+        if self.os_handler.check_executable_path() or os.path.exists("cjx.py"):
             current_dir = os.getcwd()
+            cjx_dir = self.os_handler.get_cjx_dir()
             try:
-                with open("c:/.cjx/utils_cjx.json", "r") as f:
+                with open(f"{cjx_dir}/utils_cjx.json", "r") as f:
                     path = json.load(f)
 
                 current_dir = current_dir.replace("\\", "/")
                 path["cjxPath"] = current_dir
 
-                with open("c:/.cjx/utils_cjx.json", "w") as f:
+                with open(f"{cjx_dir}/utils_cjx.json", "w") as f:
                     json.dump(path, f, indent=4)
 
                 print("\tCJX CLI path set successfully to", current_dir)
