@@ -6,7 +6,7 @@ import os
 import requests
 import shutil
 import zipfile
-from app.animator import Animator
+from utils.animator import Animator
 
 
 class FileDownloader:

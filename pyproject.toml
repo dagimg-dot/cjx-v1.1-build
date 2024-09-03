@@ -8,6 +8,9 @@ readme = "README.md"
 packages = [
     { include = "cjx", from = "src" },
     { include = "cjxupdate", from = "src" },
+    { include = "helpers", from = "src" },
+    { include = "commands", from = "src" },
+    { include = "utils", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -17,8 +20,8 @@ tqdm = "^4.66.5"
 requests = "^2.32.3"
 
 [tool.poetry.scripts]
-cjx = "cjx.cjx:CJX().run"
-cjxupdate = "cjxupdate.cjxupdate:CJXUPDATE().run"
+cjx = "cjx.cjx:main"
+cjxupdate = "cjxupdate.cjxupdate:main"
 
 [build-system]
 requires = ["poetry-core"]

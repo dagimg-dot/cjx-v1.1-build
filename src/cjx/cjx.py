@@ -337,5 +337,10 @@ class CJX:
         print("\t3. You don't have git installed")
 
 
+def main():
+    cjx = CJX()
+    cjx.run()
+
+
 if __name__ == "__main__":
-    CJX().run()
+    main()

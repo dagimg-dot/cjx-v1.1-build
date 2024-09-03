@@ -44,5 +44,10 @@ class CJXUPDATE:
             print(f"{'Cancelled by the user':<60}")
 
 
+def main():
+    cjxupdate = CJXUPDATE()
+    cjxupdate.run()
+
+
 if __name__ == "__main__":
-    CJXUPDATE().run()
+    main()
