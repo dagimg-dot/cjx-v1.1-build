@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from pathlib import Path
 import re
 from commands.simple import Simple
 from commands.jfxml import JFXML
@@ -103,7 +104,7 @@ class CJX:
                 print("\t\033[ J CJX CLI initialized successfully 🎉\033[0m")
                 os.chdir(current_path)
                 print("\t\033[ J Setting the path of CJX CLI . . .\033[0m")
-                self.set_cjx_path()
+                # self.set_cjx_path()
             else:
                 print("Error: CJX CLI already initialized")
         except Exception as e:
@@ -151,12 +152,12 @@ class CJX:
             if os.path.exists(cjx_dir):
                 self.cjx_path = os.path.join(cjx_dir, "utils_cjx.json")
                 if command == "create":
-                    if False in Doctor.handle_doctor_command(self):
-                        print(
-                            "Error: Please follow the instructions carefully, or run 'cjx doctor' to see what's wrong"
-                        )
-                    else:
-                        self.handle_create_command()
+                    # if False in Doctor.handle_doctor_command(self):
+                    #     print(
+                    #         "Error: Please follow the instructions carefully, or run 'cjx doctor' to see what's wrong"
+                    #     )
+                    # else:
+                    self.handle_create_command()
                 elif command == "setup":
                     self.handle_setup_command()
                 elif command == "doctor":
@@ -300,9 +301,11 @@ class CJX:
             return
 
     def get_cjx_path(self):
-        with open(self.cjx_path, "r") as f:
-            path = json.load(f)
-        return path["cjxPath"]
+        # with open(self.cjx_path, "r") as f:
+            # path = json.load(f)
+        # return path["cjxPath"]
+        TEMPLATE_DIR = Path(__file__).parent.parent.parent
+        return TEMPLATE_DIR
 
     def set_cjx_path(self):
         if self.os_handler.check_executable_path() or os.path.exists("cjx.py"):

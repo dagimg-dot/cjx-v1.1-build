@@ -60,7 +60,6 @@ class Doctor:
             Doctor.check_java(self),
             Doctor.check_vscode(self),
             Doctor.check_git(self),
-            Doctor.check_cjx_path(self),
             Doctor.check_javafx(self),
         ]
 
@@ -80,7 +79,6 @@ class Doctor:
             "\033[1mJava is installed ✔️\033[0m",
             "\033[1mVisual Studio Code is installed ✔️\033[0m",
             "\033[1mGit is installed ✔️\033[0m",
-            "\033[1mCJX CLI path is set ✔️\033[0m",
             "\033[1mJavaFX is setup ✔️\033[0m",
         ]
 
@@ -88,7 +86,6 @@ class Doctor:
             "\033[1mJava is not installed ❌ \033[0m",
             "\033[1mVisual Studio Code is not installed ❌ \033[0m",
             "\033[1mGit is not installed ❌ \033[0m",
-            "\033[1mCJX CLI path is not set ❌ \033[0m",
             "\033[1mJavaFX is not setup ❌ \033[0m",
         ]
 
