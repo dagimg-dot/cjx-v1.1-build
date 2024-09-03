@@ -1,6 +1,6 @@
 import platform
-from app.os_handler import WindowsHandler
-from app.os_handler import LinuxHandler
+from utils.os_handler import WindowsHandler
+from utils.os_handler import LinuxHandler
 
 
 def get_os_handler():

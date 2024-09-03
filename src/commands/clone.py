@@ -2,8 +2,8 @@ import fnmatch
 import json
 import os
 import subprocess
-from app.simple import Simple
-from app.jfxml import JFXML
+from commands.simple import Simple
+from commands.jfxml import JFXML
 
 
 class Clone:

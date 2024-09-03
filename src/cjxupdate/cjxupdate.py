@@ -1,6 +1,6 @@
 import argparse
-from app.file_download import FileDownloader
-from app.animator import Animator
+from utils.file_download import FileDownloader
+from utils.animator import Animator
 import asyncio
 
 
@@ -32,6 +32,8 @@ class CJXUPDATE:
             self.check_and_update("update")
         elif self.args.check:
             self.check_and_update("check")
+        elif not self.args.update and not self.args.check:
+            self.parser.print_help()
 
     def check_and_update(self, request):
         fd = FileDownloader()

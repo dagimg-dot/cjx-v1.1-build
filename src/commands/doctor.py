@@ -43,7 +43,7 @@ class Doctor:
         with open(self.cjx_path, "r") as f:
             path = json.load(f)
 
-        utils_path_json = f"{path['cjxPath']}/utils/utils_path.json"
+        utils_path_json = f"{path['cjxPath']}/src/config/vscode_config.json"
 
         try:
             with open(utils_path_json, "r") as f:

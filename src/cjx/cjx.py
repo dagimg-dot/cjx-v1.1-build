@@ -2,10 +2,10 @@ import argparse
 import json
 import os
 import re
-from app.simple import Simple
-from app.jfxml import JFXML
-from app.doctor import Doctor
-from app.clone import Clone
+from commands.simple import Simple
+from commands.jfxml import JFXML
+from commands.doctor import Doctor
+from commands.clone import Clone
 from helpers import os_identifier
 
 
@@ -285,7 +285,7 @@ class CJX:
             if path["cjxPath"] == "":
                 print("Error: CJX CLI path not set")
             else:
-                utils_path_json = f"{path['cjxPath']}/utils/utils_path.json"
+                utils_path_json = f"{path['cjxPath']}/src/config/vscode_config.json"
 
                 with open(utils_path_json, "r") as f:
                     utils_path = json.load(f)

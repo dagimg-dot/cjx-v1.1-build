@@ -2,7 +2,4 @@ build/
 dist/
 *.spec
 __pycache__/
-src/
 .vscode/
-cjx/
-cjx-env/

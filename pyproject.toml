@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "cjx"
+version = "3.3"
+description = "Bootstrapping JavaFX Development Environment in VSCode"
+authors = ["Dagim G. Astatkie <workflow.jd@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "cjx", from = "src" },
+    { include = "cjxupdate", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiohttp = "^3.10.5"
+tqdm = "^4.66.5"
+requests = "^2.32.3"
+
+[tool.poetry.scripts]
+cjx = "cjx.cjx:CJX().run"
+cjxupdate = "cjxupdate.cjxupdate:CJXUPDATE().run"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

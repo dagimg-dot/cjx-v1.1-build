@@ -5,22 +5,26 @@ from tqdm import tqdm
 import time
 
 
-class Simple:
-    def create_simple(self):
+class JFXML:
+    def create_jfxml(self):
         try:
             functions = [
-                Simple.create_gitignore,
-                Simple.create_readme,
-                Simple.vscode_folder,
-                Simple.create_launch_json,
-                Simple.create_settings_json,
-                Simple.create_bin_folder,
-                Simple.create_src_folder,
-                Simple.create_src_files,
+                JFXML.create_gitignore,
+                JFXML.create_readme,
+                JFXML.vscode_folder,
+                JFXML.create_launch_json,
+                JFXML.create_settings_json,
+                JFXML.create_bin_folder,
+                JFXML.create_src_folder,
+                JFXML.create_src_sub_folders,
+                JFXML.create_java_package,
+                JFXML.create_class,
+                JFXML.create_resources_package,
+                JFXML.create_main_fxml,
             ]
 
             success = True
-            success &= Simple.create_directory(self)
+            success &= JFXML.create_directory(self)
 
             if success:
                 with tqdm(total=len(functions)) as pbar:
@@ -35,8 +39,8 @@ class Simple:
             print(f"Error: {e}")
             return False
 
-    def handle_simple(self):
-        flag = Simple.create_simple(self)
+    def handle_jfxml(self):
+        flag = JFXML.create_jfxml(self)
         if flag:
             print(
                 f"\n\t\033[1mProject {self.project_name} created successfully 🎇\033[0m\n"
@@ -76,7 +80,7 @@ class Simple:
 
 # Ignore compiled binary files
 bin/
-            """
+        """
 
             with open(".gitignore", "w") as f:
                 f.write(git_ignore)
@@ -89,7 +93,9 @@ bin/
     def create_readme(self):
         try:
             time.sleep(0.2)
-            with open(f"{self.get_cjx_path()}/src/simple/README.md") as f:
+            with open(f"{self.get_cjx_path()}/templates/jfxml/README.md") as f:
+                # print(os.getcwd())
+                # with open('templates/jfxml/README.md') as f:
                 readme = f.read()
 
             readme = readme.replace(
@@ -115,12 +121,10 @@ bin/
     def create_launch_json(self):
         try:
             time.sleep(0.2)
-            with open(
-                f"{self.get_cjx_path()}/src/simple/.vscode/launch.json", "r"
-            ) as f:
+            with open(f"{self.get_cjx_path()}/templates/jfxml/.vscode/launch.json", "r") as f:
                 launch = json.load(f)
 
-            with open(f"{self.get_cjx_path()}/utils/utils_path.json", "r") as f:
+            with open(f"{self.get_cjx_path()}/src/config/vscode_config.json", "r") as f:
                 constants = json.load(f)
 
             module_path = constants["javafxPath"] + "/lib"
@@ -129,6 +133,7 @@ bin/
                 config["vmArgs"] = (
                     f'--module-path "{module_path}" --add-modules javafx.controls,javafx.fxml'
                 )
+                config["mainClass"] = f"com.{self.package_name}.App"
 
             with open(".vscode/launch.json", "w") as f:
                 json.dump(launch, f, indent=4)
@@ -143,11 +148,13 @@ bin/
         try:
             time.sleep(0.2)
             with open(
-                f"{self.get_cjx_path()}/src/simple/.vscode/settings.json", "r"
+                f"{self.get_cjx_path()}/templates/jfxml/.vscode/settings.json", "r"
             ) as f:
+                # with open('templates/jfxml/.vscode/settings.json', 'r') as f:
                 settings = json.load(f)
 
-            with open(f"{self.get_cjx_path()}/utils/utils_path.json", "r") as f:
+            # with open(f'{self.get_cjx_path()}/src/config/vscode_config.json', 'r') as f:
+            with open(f"{self.get_cjx_path()}/src/config/vscode_config.json", "r") as f:
                 constants = json.load(f)
 
             jar_path = constants["jarPath"]
@@ -187,17 +194,85 @@ bin/
             print(f"Error creating src folder: {e}")
             return False
 
-    def create_src_files(self):
+    def create_src_sub_folders(self):
         try:
             time.sleep(0.2)
             os.chdir("src")
-            with open(f"{self.get_cjx_path()}/src/simple/src/App.java.txt", "r") as f:
+            parent_dir = "main"
+            os.mkdir(parent_dir)
+            os.mkdir(f"{parent_dir}/java")
+            os.mkdir(f"{parent_dir}/resources")
+            return True
+        except OSError as e:
+            print(f"Error creating src folder: {e}")
+            return False
+
+    def create_java_package(self):
+        try:
+            time.sleep(0.2)
+            os.chdir("main/java")
+            os.mkdir("com")
+            os.mkdir(f"com/{self.package_name}")
+            return True
+        except OSError as e:
+            print(f"Error creating package in java folder: {e}")
+            return False
+
+    def create_resources_package(self):
+        try:
+            time.sleep(0.2)
+            os.chdir("..")
+            os.chdir("..")
+            os.chdir("main/resources")
+            os.mkdir("com")
+            os.mkdir(f"com/{self.package_name}")
+            return True
+        except OSError as e:
+            print(f"Error creating package resources folder: {e}")
+            return False
+
+    def create_class(self):
+        try:
+            time.sleep(0.2)
+            with open(
+                f"{self.get_cjx_path()}/templates/jfxml/src/main/java/com/App.java.txt", "r"
+            ) as f:
                 app = f.read()
 
-            with open("App.java", "w") as f:
+            app = app.replace("package_name", self.package_name)
+
+            with open(f"com/{self.package_name}/App.java", "w") as f:
                 f.write(app)
+
+            with open(
+                f"{self.get_cjx_path()}/templates/jfxml/src/main/java/com/HelloWorldController.java.txt",
+                "r",
+            ) as f:
+                controller = f.read()
+
+            controller = controller.replace("package_name", self.package_name)
+
+            with open(f"com/{self.package_name}/HelloWorldController.java", "w") as f:
+                f.write(controller)
 
             return True
         except OSError as e:
-            print(f"Error creating src files: {e}")
+            print(f"Error creating Class files: {e}")
+            return False
+
+    def create_main_fxml(self):
+        try:
+            with open(
+                f"{self.get_cjx_path()}/templates/jfxml/src/main/resources/com/HelloWorld.fxml.txt",
+                "r",
+            ) as f:
+                fxml = f.read()
+
+            fxml = fxml.replace("package_name", self.package_name)
+
+            with open(f"com/{self.package_name}/HelloWorld.fxml", "w") as f:
+                f.write(fxml)
+            return True
+        except OSError as e:
+            print(f"Error creating FXML file: {e}")
             return False
